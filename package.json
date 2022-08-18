@@ -10,16 +10,21 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:smart-delete.helloWorld"
+        "onCommand:smart-delete.smartDelete",
+        "onCommand:smart-delete.smartBackspace"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "smart-delete.helloWorld",
-				"title": "Hello World"
-			}
-		]
+        "commands": [
+            {
+                "command": "smart-delete.smartDelete",
+                "title": "smartDelete"
+            },
+            {
+                "command": "smart-delete.smartBackspace",
+                "title": "smartBackspace"
+            }
+        ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
