@@ -24,6 +24,20 @@
         "command": "smart-delete.smartBackspace",
         "title": "smartBackspace"
       }
+    ],
+    "keybindings": [
+      {
+        "command": "smart-delete.smartDelete",
+        "key": "delete",
+        "mac": "delete",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "smart-delete.smartBackspace",
+        "key": "backspace",
+        "mac": "backspace",
+        "when": "editorTextFocus"
+      }
     ]
   },
   "scripts": {
