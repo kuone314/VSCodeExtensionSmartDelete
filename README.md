@@ -9,6 +9,11 @@
 * On joining lises by delete/backspace, remove indent spaces/tabs.  
   delete/backspace で行を連結した際に、インデント用のタブ/スペースを自動で削除します。
 
+# Command
+* smart-delete.smartDelete
+  * Keybind: `Delete`
+* smart-delete.smartBackspace
+  * Keybind: `Backspace`
 # Link
 
 * [GitHub](https://github.com/kuone314/VSCodeExtensionSmartDelete)
