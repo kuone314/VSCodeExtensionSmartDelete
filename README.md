@@ -4,6 +4,8 @@
 
 # Smart Delete
 
+![Sample](Doc/Demonstration1.gif)
+
 * On joining lises by delete/backspace, remove indent spaces/tabs.  
   delete/backspace で行を連結した際に、インデント用のタブ/スペースを自動で削除します。
 
