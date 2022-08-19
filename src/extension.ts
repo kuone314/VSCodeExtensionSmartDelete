@@ -50,7 +50,45 @@ function getNextLine(document: vscode.TextDocument, lineNum: number): vscode.Tex
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 function smartBackspace(editor:vscode.TextEditor){
+	const removeRangeAry = Enumerable.from(editor.selections).Select(
+		orgSelection => {
+			return getSmartBackspaceRemoveRange(editor.document, orgSelection);
+		}
+	).ToArray();
 
+	editor.edit(editBuilder => {
+		for(const removeRange of removeRangeAry){
+			editBuilder.replace(removeRange, "");
+		}
+	});
+}
+
+function getSmartBackspaceRemoveRange(document: vscode.TextDocument, orgSelection: vscode.Selection): vscode.Range {
+	const pos = isSingleCullet(orgSelection);
+	if (!pos) { return orgSelection; }
+
+	if (!isLineStart(document, pos)) { return new vscode.Range(pos.translate(0, -1), pos); }
+
+	const prevLine = getPrevLine(document, orgSelection.end.line);
+	if (!prevLine) { return orgSelection; }
+	const prevLineEnd = prevLine.range.end;
+
+	const currLine = document.lineAt(orgSelection.end);
+	const blanksNum = currLine.firstNonWhitespaceCharacterIndex;
+	const currHeadPos = orgSelection.end.translate(0,blanksNum);
+
+	return new vscode.Selection(prevLineEnd, currHeadPos);
+}
+
+function isLineStart(document: vscode.TextDocument, pos: vscode.Position): boolean {
+	const line = document.lineAt(pos);
+	return line.range.start.isEqual(pos);
+}
+
+function getPrevLine(document: vscode.TextDocument, lineNum: number): vscode.TextLine | null {
+	const prevLineNum = lineNum - 1;
+	if (prevLineNum <= 0) { return null; }
+	return document.lineAt(prevLineNum );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
