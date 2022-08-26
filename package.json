@@ -2,7 +2,7 @@
   "name": "smart--delete",
   "displayName": "smart-delete",
   "description": "",
-  "icon": "Doc/icon.png",
+  "icon": "doc/icon.png",
   "version": "1.0.1",
 	"repository": "https://github.com/kuone314/VSCodeExtensionSmartDelete",
 	"publisher": "kuone",
