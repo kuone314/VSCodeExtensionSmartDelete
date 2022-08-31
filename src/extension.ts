@@ -8,6 +8,10 @@ function isSingleCullet(selecion: vscode.Range): vscode.Position | null {
 	return selecion.start;
 }
 
+function isEmptyLine(document: vscode.TextDocument, lineMum: number): boolean {
+	return (document.lineAt(lineMum).text.length === 0);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 function smartDelete(editor:vscode.TextEditor){
 	editor.selections = Enumerable.from(editor.selections).Select(
@@ -24,6 +28,7 @@ function getSmartDeleteRemoveRange(document: vscode.TextDocument, orgSelection: 
 	if (!pos) { return orgSelection; }
 
 	if (!isLineEnd(document, pos)) { return orgSelection; }
+	if (isEmptyLine(document, pos.line)) { return orgSelection; }
 
 	const nextLine = getNextLine(document, orgSelection.end.line);
 	if (!nextLine) { return orgSelection; }
@@ -63,6 +68,7 @@ function getSmartBackspaceRemoveRange(document: vscode.TextDocument, orgSelectio
 
 	const prevLine = getPrevLine(document, orgSelection.end.line);
 	if (!prevLine) { return orgSelection; }
+	if (isEmptyLine(document, prevLine.lineNumber)) { return orgSelection; }
 	const prevLineEnd = prevLine.range.end;
 
 	const currLine = document.lineAt(orgSelection.end);
