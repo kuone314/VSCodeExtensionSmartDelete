@@ -8,26 +8,27 @@ function isSingleCullet(selecion: vscode.Range): vscode.Position | null {
 	return selecion.start;
 }
 
+function isEmptyLine(document: vscode.TextDocument, lineMum: number): boolean {
+	return (document.lineAt(lineMum).text.length === 0);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 function smartDelete(editor:vscode.TextEditor){
-	const removeRangeAry = Enumerable.from(editor.selections).Select(
+	editor.selections = Enumerable.from(editor.selections).Select(
 		orgSelection => {
 			return getSmartDeleteRemoveRange(editor.document, orgSelection);
 		}
 	).ToArray();
 
-	editor.edit(editBuilder => {
-		for(const removeRange of removeRangeAry){
-			editBuilder.replace(removeRange, "");
-		}
-	});
+	vscode.commands.executeCommand('deleteRight');
 }
 
-function getSmartDeleteRemoveRange(document: vscode.TextDocument, orgSelection: vscode.Selection): vscode.Range {
+function getSmartDeleteRemoveRange(document: vscode.TextDocument, orgSelection: vscode.Selection): vscode.Selection {
 	const pos = isSingleCullet(orgSelection);
 	if (!pos) { return orgSelection; }
 
-	if (!isLineEnd(document, pos)) { return new vscode.Range(pos, pos.translate(0, 1)); }
+	if (!isLineEnd(document, pos)) { return orgSelection; }
+	if (isEmptyLine(document, pos.line)) { return orgSelection; }
 
 	const nextLine = getNextLine(document, orgSelection.end.line);
 	if (!nextLine) { return orgSelection; }
@@ -50,27 +51,24 @@ function getNextLine(document: vscode.TextDocument, lineNum: number): vscode.Tex
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 function smartBackspace(editor:vscode.TextEditor){
-	const removeRangeAry = Enumerable.from(editor.selections).Select(
+	editor.selections = Enumerable.from(editor.selections).Select(
 		orgSelection => {
 			return getSmartBackspaceRemoveRange(editor.document, orgSelection);
 		}
 	).ToArray();
 
-	editor.edit(editBuilder => {
-		for(const removeRange of removeRangeAry){
-			editBuilder.replace(removeRange, "");
-		}
-	});
+	vscode.commands.executeCommand('deleteLeft');
 }
 
-function getSmartBackspaceRemoveRange(document: vscode.TextDocument, orgSelection: vscode.Selection): vscode.Range {
+function getSmartBackspaceRemoveRange(document: vscode.TextDocument, orgSelection: vscode.Selection): vscode.Selection {
 	const pos = isSingleCullet(orgSelection);
 	if (!pos) { return orgSelection; }
 
-	if (!isLineStart(document, pos)) { return new vscode.Range(pos.translate(0, -1), pos); }
+	if (!isLineStart(document, pos)) { return orgSelection; }
 
 	const prevLine = getPrevLine(document, orgSelection.end.line);
 	if (!prevLine) { return orgSelection; }
+	if (isEmptyLine(document, prevLine.lineNumber)) { return orgSelection; }
 	const prevLineEnd = prevLine.range.end;
 
 	const currLine = document.lineAt(orgSelection.end);
