@@ -3,7 +3,7 @@
   "displayName": "smart-delete",
   "description": "",
   "icon": "doc/icon.png",
-  "version": "1.0.2",
+  "version": "1.0.3",
 	"repository": "https://github.com/kuone314/VSCodeExtensionSmartDelete",
 	"publisher": "kuone",
   "engines": {
@@ -13,8 +13,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:smart-delete.smartDelete",
-    "onCommand:smart-delete.smartBackspace"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
