@@ -13,8 +13,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:smart-delete.smartDelete",
-    "onCommand:smart-delete.smartBackspace"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
